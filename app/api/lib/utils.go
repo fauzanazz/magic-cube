@@ -1,4 +1,4 @@
-package Lib
+package lib
 
 const magicNb = 315
 
