@@ -1,4 +1,4 @@
-import LayoutMenu from "./layout";
+import LayoutMenu from "./layout-menu";
 
 const MainMenu = () => {
   return <LayoutMenu></LayoutMenu>;
