@@ -7,6 +7,7 @@ import DescriptionDisplay, {
 } from "@/components/result/experiment-description/description-display";
 import { AlgorithmEnum } from "@/app/main-menu/layout-menu";
 import { DescFieldProps } from "@/components/result/experiment-description/description-field";
+import { useData } from "@/context/DataProvider";
 
 // Updated AlgorithmData structure
 const AlgorithmData: { [key in AlgorithmEnum]: DescFieldProps[] } = {
@@ -100,13 +101,22 @@ const ExperienceDescription = () => {
   // Dummy Used Algorithm
   const selectedAlgorithm = AlgorithmEnum.Annealing;
   const data_algorihtm = AlgorithmData[selectedAlgorithm];
+
+  const data = useData();
+  const mappedData = data?.description 
+    ? Object.entries(data.description).map(([key, value]) => ({
+        title: key, // Use the key as the title
+        value: value?.toString() || "", // Convert the value to a string or provide a fallback
+      }))
+    : [];
+
   return (
     <div className="font-pixelify">
       <NavController />
       <h1 className="text-4xl p-10 font-bold">Deskripsi</h1>
       <DescriptionDisplay
         algorithm={selectedAlgorithm}
-        data={data_algorihtm}
+        data={mappedData}
       ></DescriptionDisplay>
     </div>
   );

@@ -3,11 +3,13 @@
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AlgorithmSelection from "@/components/main-menu/algorithm-input";
 import ParametersInput from "@/components/main-menu/param-input";
 import OptionsInput from "@/components/main-menu/option-input";
-import Link from "next/link";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 export enum AlgorithmEnum {
   Sideways = "Sideways Hill Climbing",
@@ -22,31 +24,88 @@ export interface MenuData {
   algorithm: AlgorithmEnum;
   iteration: number; // Params for Genetic, Sideways,
   population: number; // Params for Genetic Algorithm
-  randomInput: boolean; // Slider for input option
+  isFile: boolean; // Slider for input option
   file: any;
 }
 
+// Create the validation schema
+export const menuSchema = z
+  .object({
+    algorithm: z.nativeEnum(AlgorithmEnum),
+
+    // Iteration: validated conditionally
+    iteration: z.number().min(0).optional(),
+
+    // Population: validated conditionally
+    population: z.number().min(0).optional(),
+
+    // Random input toggle
+    isFile: z.boolean().optional(),
+
+    // File: required when randomInput is false
+    file: z.any().optional(),
+  })
+  .superRefine((data, ctx) => {
+    // Check if algorithm requires iteration
+    const requiresIteration = [
+      AlgorithmEnum.Sideways,
+      AlgorithmEnum.RandomHill,
+      AlgorithmEnum.Genetic,
+    ].includes(data.algorithm);
+
+    // If iteration is required, validate its value
+    if (
+      requiresIteration &&
+      (data.iteration === undefined || data.iteration <= 0)
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["iteration"],
+        message:
+          "Iteration is required and must be greater than 0 for the selected algorithm.",
+      });
+    }
+
+    // Check if algorithm requires population (Genetic only)
+    if (
+      data.algorithm === AlgorithmEnum.Genetic &&
+      (data.population === undefined || data.population <= 0)
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["population"],
+        message:
+          "Population is required and must be greater than 0 for Genetic Algorithm.",
+      });
+    }
+
+    // If randomInput is false, file must be provided
+    if (data.isFile && !data.file) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["file"],
+        message: "File is required when random input is disabled.",
+      });
+    }
+  });
+
 const LayoutMenu = () => {
+  const navigate = useRouter();
   const [fileContent, setFileContent] = useState<any>(null);
 
   const form = useForm<MenuData>({
+    resolver: zodResolver(menuSchema),
     defaultValues: {
       algorithm: AlgorithmEnum.Ascent,
       iteration: 0,
       population: 0,
-      randomInput: false,
+      isFile: false,
       file: null,
     },
   });
-  
+
   const selectedAlgorithm = form.watch("algorithm");
-  const isOptionRandom = form.watch("randomInput");
-  
-  useEffect(() => {
-    // This effect could be useful if you want to do something
-    // whenever randomInput changes.
-    console.log("Random input toggled:", isOptionRandom);
-  }, [selectedAlgorithm]);
+  const isOptionRandom = form.watch("isFile");
 
   // Check if Population need to be Rendered
   function isPopulation() {
@@ -62,7 +121,9 @@ const LayoutMenu = () => {
   }
 
   const onSubmit = (data: MenuData) => {
-    console.log(data);
+    console.log("TEST DATa : ", data);
+    // Execute Data Here
+    navigate.push("/result");
   };
 
   return (
@@ -76,7 +137,11 @@ const LayoutMenu = () => {
         </h2>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
+          <form
+            action="POST"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6 "
+          >
             <AlgorithmSelection form={form} />
 
             <ParametersInput
@@ -92,11 +157,9 @@ const LayoutMenu = () => {
 
             {/* Submit Button */}
             <div className="flex justify-center w-full pt-10 ">
-              <Link href="/result">
-                <Button type="submit" className=" bg-moldy_green w-72 text-xl">
-                  Start
-                </Button>
-              </Link>
+              <Button type="submit" className=" bg-moldy_green w-72 text-xl">
+                Start
+              </Button>
             </div>
           </form>
         </Form>
