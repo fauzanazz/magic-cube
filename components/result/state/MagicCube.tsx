@@ -4,8 +4,13 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import Cube from "./Cube"; // Adjust the path as necessary
+import { State } from "@/context/DataProvider";
 
-const MagicCube: React.FC = () => {
+export interface CubeGridProps {
+  initialCubes: State;
+}
+
+const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
   const [cubeNumbers, setCubeNumbers] = useState<{ [key: number]: number }>({});
   const gridDimension = 5; // Size of the grid
   const spacing = 2.5;
@@ -33,14 +38,29 @@ const MagicCube: React.FC = () => {
     });
   };
 
-  // Generate cube positions and content
   useEffect(() => {
     const initialNumbers: { [key: number]: number } = {};
-    for (let i = 0; i < gridDimension ** 3; i++) {
-      initialNumbers[i] = Math.floor(Math.random() * 125); // Random number between 0 and 124
+
+    // Ensure the initialCubes length is 125 and IDs are unique from 1 to 125
+    if (initialCubes.length === 125) {
+      initialCubes.forEach((cube) => {
+        if (cube[0] >= 1 && cube[0]<= 125) {
+          initialNumbers[cube[0]] = cube[1];
+        } else {
+          console.error("Cube ID out of range: ", cube[0]);
+        }
+      });
+    } else {
+      console.warn("Initial cubes should contain exactly 125 cubes.");
+
+      // Generate Random Self if error cause of inital cues contain no 125 cubes
+      for (let i = 1; i <= gridDimension ** 3; i++) {
+        initialNumbers[i] = Math.floor(Math.random() * 125); // Random number between 1 and 125
+      }
     }
+
     setCubeNumbers(initialNumbers);
-  }, [gridDimension]);
+  }, [initialCubes, gridDimension]);
 
   let counter = 0;
   for (let x = 0; x < gridDimension; x++) {

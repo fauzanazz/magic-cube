@@ -16,6 +16,7 @@ const DescriptionDisplay: React.FC<DescriptionDescProps> = ({
         Algoritma : <strong>{algorithm}</strong>
       </h1>
       <div>
+        {/* Map all the Description Content */}
         {data.map((item, index) => (
           <DescriptionField
             key={index}

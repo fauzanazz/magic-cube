@@ -24,11 +24,11 @@ const NavController = () => {
         </h1>
         <NavCapsule
           isActive={pathname  === "/result/state-awal" || pathname === "/result"}
-          href="state-awal"
+          href="/result/state-awal"
           label="State Awal"
         ></NavCapsule>
-        <NavCapsule isActive={pathname === "/result/state-akhir"} href="state-akhir" label="State Akhir"></NavCapsule>
-        <NavCapsule isActive= {pathname === "/result/deskripsi"} href="deskripsi" label="Deskripsi"></NavCapsule>
+        <NavCapsule isActive={pathname === "/result/state-akhir"} href="/result/state-akhir" label="State Akhir"></NavCapsule>
+        <NavCapsule isActive= {pathname === "/result/deskripsi"} href="/result/deskripsi" label="Deskripsi"></NavCapsule>
       </div>
 
       <div className="flex flex-col w-full gap-y-8 mt-20">

@@ -46,7 +46,7 @@ const OptionsInput = ({ form, handleFileUpload, isRandom }: Props) => {
         {/* Switch Input */}
         <FormField
           control={form.control}
-          name="randomInput"
+          name="isFile"
           render={({ field }) => (
             <FormItem className="flex gap-3 text-sm items-center font-semibold">
               <h5

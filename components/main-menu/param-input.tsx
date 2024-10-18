@@ -5,6 +5,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
@@ -45,8 +46,15 @@ const ParametersInput = ({
                         min={0}
                         placeholder="Enter Max Iteration"
                         className="w-full"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value ? Number(value) : 0);
+                        }}
                       />
                     </FormControl>
+                    <FormMessage>
+                      {form.formState.errors.iteration?.message}
+                    </FormMessage>
                   </FormItem>
                 )}
               />
@@ -68,8 +76,15 @@ const ParametersInput = ({
                         type="number"
                         min={0}
                         placeholder="Enter population size"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value ? Number(value) : 0);
+                        }}
                       />
                     </FormControl>
+                    <FormMessage>
+                      {form.formState.errors.population?.message}
+                    </FormMessage>
                   </FormItem>
                 )}
               />
