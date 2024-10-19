@@ -1,6 +1,11 @@
 package lib
 
-import "math/rand"
+import (
+	"encoding/json"
+	"log"
+	"math/rand"
+	"os"
+)
 
 func RandomInt(min int, max int) int {
 	if max <= min {
@@ -27,5 +32,18 @@ func PrintState(state [125]int) {
 			println()
 		}
 		println()
+	}
+}
+
+func SaveToJson(res any) {
+	jsonData, err := json.MarshalIndent(res, "", "  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Write the JSON to a file
+	err = os.WriteFile("../../public/external-data/data.json", jsonData, 0644)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
