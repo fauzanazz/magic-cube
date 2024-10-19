@@ -15,6 +15,7 @@ func main() {
 	router := mux.NewRouter()
 
 	// Path
+	router.HandleFunc("/api/steepest_ascent", SteepestAscentHandler).Methods("GET")
 	router.HandleFunc("/api/simulated_anneling", SimulatedAnneling).Methods("GET")
 	router.HandleFunc("/api/genetic_algorithm", GeneticAlgorithm).Methods("GET")
 	router.HandleFunc("/api/test_obj_func", TestObjFunc).Methods("GET")
@@ -29,6 +30,13 @@ func SimulatedAnneling(w http.ResponseWriter, r *http.Request) {
 
 func GeneticAlgorithm(w http.ResponseWriter, r *http.Request) {
 	Algorithm.GeneticAlgorithm(1000, 1000)
+}
+
+func SteepestAscentHandler(w http.ResponseWriter, r *http.Request) {
+    initialState := lib.GenerateSuccessor()
+    bestState, bestCost, duration, iteration, successorCount := Algorithm.SteepestAscent(initialState)
+    fmt.Fprintf(w, "Best State: %v\nBest Cost: %d\nDuration: %v\nIterations: %d\nSuccessors Generated: %d\n", bestState, bestCost, duration, iteration, successorCount)
+    fmt.Println("Steepest Ascent Completed")
 }
 
 func TestObjFunc(w http.ResponseWriter, r *http.Request) {

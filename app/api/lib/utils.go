@@ -29,3 +29,26 @@ func PrintState(state [125]int) {
 		println()
 	}
 }
+
+func FindHighestNeighbor(state [125]int) ([125]int, int, int) {
+    var bestNeighbor [125]int
+    bestCost := -1 
+    successorCount := 0
+
+    for i := 0; i < 125; i++ {
+        for j := i + 1; j < 125; j++ {
+            newNeighbor := state
+            newNeighbor[i], newNeighbor[j] = newNeighbor[j], newNeighbor[i]
+            successorCount++
+
+            cost := ObjectiveFunction(newNeighbor)
+
+            if cost > bestCost {
+                bestCost = cost
+                bestNeighbor = newNeighbor
+            
+        }
+    }
+    }
+    return bestNeighbor, bestCost, successorCount
+}
