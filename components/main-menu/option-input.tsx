@@ -1,9 +1,9 @@
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -87,6 +87,9 @@ const OptionsInput = ({ form, handleFileUpload, isRandom }: Props) => {
                     className="border-primary_green text-primary_green placeholder:text-primary_green hover:cursor-pointer"
                   />
                 </FormControl>
+                <FormMessage>
+                
+                </FormMessage>
               </FormItem>
             )}
           />

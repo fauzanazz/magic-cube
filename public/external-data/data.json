@@ -1,7 +1,7 @@
 {
   "description" :{
     "objectiveFunction": 29,
-    "duration": 64
+    "duration": "64 ms"
   },
   "firstState": [
     [
