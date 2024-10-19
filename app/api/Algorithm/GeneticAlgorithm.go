@@ -126,16 +126,8 @@ func GeneticAlgorithm(jumlah_populasi int, jumlah_generasi int) bool {
 	// fmt.Println("Best State: ")
 	// lib.PrintState(bestState)
 
-	lastState := make([][]int, 125)
-	firstState := make([][]int, 125)
-	for i := range lastState {
-		lastState[i] = make([]int, 2)
-		lastState[i][0] = i+1
-		lastState[i][1] = bestState[i]
-		firstState[i] = make([]int, 2)
-		firstState[i][0] = i+1
-		firstState[i][1] = bestFirstState[i]
-	}
+	lastState := lib.ConvertToResult(bestState)
+	firstState := lib.ConvertToResult(bestFirstState)
 
 	res := map[string]interface{}{
 		"algorithm" : "Genetic Algorithm",

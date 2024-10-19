@@ -138,6 +138,12 @@ const LayoutMenu = () => {
               iteration: data.iteration,
             }),
           };
+        case AlgorithmEnum.Ascent:
+          return {
+            url: apiPath + "steepest_ascent",
+            method : "POST",
+          };
+
         default:
           return null;
       }

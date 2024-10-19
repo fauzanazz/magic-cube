@@ -39,6 +39,7 @@ func main() {
 
 	
 	// Path
+	router.HandleFunc("/api/steepest_ascent", SteepestAscentHandler).Methods("POST")
 	router.HandleFunc("/api/simulated_anneling", SimulatedAnneling).Methods("GET")
 	router.HandleFunc("/api/genetic_algorithm", GeneticAlgorithm).Methods("POST")
 	router.HandleFunc("/api/test_obj_func", TestObjFunc).Methods("GET")
@@ -69,6 +70,18 @@ func GeneticAlgorithm(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(req)
 
 	resp := Algorithm.GeneticAlgorithm(req.Population, req.Iteration)
+	if resp {
+		json.NewEncoder(w).Encode("OK")
+	} else {
+		json.NewEncoder(w).Encode("Error")
+	}
+}
+
+func SteepestAscentHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println("Steepest Ascent Completed")
+	
+	initialState := lib.GenerateSuccessor()
+	resp := Algorithm.SteepestAscent(initialState)
 	if resp {
 		json.NewEncoder(w).Encode("OK")
 	} else {
