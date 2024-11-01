@@ -24,14 +24,10 @@ const Cube: React.FC<CubeProps> = ({
 }) => {
   const meshRef = useRef<THREE.Mesh>(null);
 
-  const handleClick = () => {
-    // Generate a new random number for swapping (this can be customized)
-    const newNumber = Math.floor(Math.random() * 125);
-    onSwap(id, newNumber);
-  };
+
 
   return (
-    <mesh ref={meshRef} position={position} onClick={handleClick}>
+    <mesh ref={meshRef} position={position}>
       <boxGeometry args={[size[0], size[1], size[2]]} />
       <meshStandardMaterial color={cube_color} />
       {/* Add text inside the cube */}

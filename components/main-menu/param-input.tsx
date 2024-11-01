@@ -43,17 +43,16 @@ const ParametersInput = ({
                       <Input
                         {...field}
                         type="number"
-                        min={0}
+                        min={1}
                         placeholder="Enter Max Iteration"
                         className="w-full"
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          field.onChange(value ? Number(value) : 0);
-                        }}
+                        {...form.register("iteration", {
+                          valueAsNumber : true,
+                        })}
                       />
                     </FormControl>
                     <FormMessage>
-                      {form.formState.errors.iteration?.message}
+          
                     </FormMessage>
                   </FormItem>
                 )}
@@ -74,16 +73,15 @@ const ParametersInput = ({
                       <Input
                         {...field}
                         type="number"
-                        min={0}
+                        min={1}
                         placeholder="Enter population size"
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          field.onChange(value ? Number(value) : 0);
-                        }}
+                        {...form.register("population", {
+                          valueAsNumber : true,
+                        })}
                       />
                     </FormControl>
                     <FormMessage>
-                      {form.formState.errors.population?.message}
+                      
                     </FormMessage>
                   </FormItem>
                 )}

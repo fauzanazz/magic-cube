@@ -1,6 +1,11 @@
 package lib
 
-import "math/rand"
+import (
+	"encoding/json"
+	"log"
+	"math/rand"
+	"os"
+)
 
 func RandomInt(min int, max int) int {
 	if max <= min {
@@ -28,4 +33,49 @@ func PrintState(state [125]int) {
 		}
 		println()
 	}
+}
+
+func SaveToJson(res any) {
+	jsonData, err := json.MarshalIndent(res, "", "  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Write the JSON to a file
+	err = os.WriteFile("../../public/external-data/data.json", jsonData, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+func FindHighestNeighbor(state [125]int) ([125]int, int, int) {
+    var bestNeighbor [125]int
+    bestCost := -1 
+    successorCount := 0
+
+    for i := 0; i < 125; i++ {
+        for j := i + 1; j < 125; j++ {
+            newNeighbor := state
+            newNeighbor[i], newNeighbor[j] = newNeighbor[j], newNeighbor[i]
+            successorCount++
+
+            cost := ObjectiveFunction(newNeighbor)
+
+            if cost > bestCost {
+                bestCost = cost
+                bestNeighbor = newNeighbor
+            
+        }
+    }
+    }
+    return bestNeighbor, bestCost, successorCount
+}
+
+func ConvertToResult(list [125]int) [][]int{
+	res := make([][]int, 125)
+	for i := range res{
+		res[i] = make([]int,2)
+		res[i][0] = i + 1
+		res[i][1] = list[i]
+	}
+	return res
 }

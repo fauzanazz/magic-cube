@@ -6,10 +6,11 @@ import (
 	"time"
 )
 
-func GeneticAlgorithm(jumlah_populasi int, jumlah_generasi int) [125]int {
+func GeneticAlgorithm(jumlah_populasi int, jumlah_generasi int) bool {
 	iterasi := 0
 	currentTime := time.Now()
 	populasi := lib.GeneratePopulation(jumlah_populasi)
+	bestFirstState := [125]int{}
 	// populasi_awal := populasi
 	bestState := [125]int{}
 	bestCost := 0
@@ -31,6 +32,18 @@ func GeneticAlgorithm(jumlah_populasi int, jumlah_generasi int) [125]int {
 					bestState = populasi[i]
 				}
 			}
+		}
+
+		if (iterasi == 0) {
+			tempBestCost := 0
+			tempBestIdx := 0
+			for i := 0; i < jumlah_populasi; i++ {
+				if (tempBestCost < cost[i]) {
+					tempBestCost = cost[i]
+					tempBestIdx = i
+				}
+			}
+			bestFirstState = populasi[tempBestIdx]
 		}
 
 		// Selection
@@ -105,11 +118,30 @@ func GeneticAlgorithm(jumlah_populasi int, jumlah_generasi int) [125]int {
 		populasi = newGeneration
 		iterasi++
 	}
-	fmt.Println("Time: ", time.Since(currentTime))
+	executeTime := time.Since(currentTime) 
+	fmt.Println("Time: ", executeTime)
 	fmt.Println("Best Cost: ", bestCost)
+
+
 	// fmt.Println("Best State: ")
 	// lib.PrintState(bestState)
 
-	return bestState
+	lastState := lib.ConvertToResult(bestState)
+	firstState := lib.ConvertToResult(bestFirstState)
 
+	res := map[string]interface{}{
+		"algorithm" : "Genetic Algorithm",
+		"description": map[string]interface{}{
+			"Jumlah Populasi Awal": jumlah_populasi,
+			"Jumlah Generasi": jumlah_generasi,
+			"Best Value": bestCost,
+			"Duration":   executeTime.String(),
+		},
+		"firstState": firstState,
+		"lastState": lastState,
+	}
+
+	lib.SaveToJson(res)
+
+	return true
 }

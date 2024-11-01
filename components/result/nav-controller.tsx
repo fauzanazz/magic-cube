@@ -35,7 +35,7 @@ const NavController = () => {
         <h1 className="text-3xl text-white text-center font-bold">
           Action Button
         </h1>
-        <Button className="text-xl font-semibold py-4 bg-white w-full text-black">
+        <Button className="text-xl font-semibold py-4 bg-white w-full text-black flex flex-row gap-x-4">
           <h2>Download</h2>
           <Image
             src="/images/Download.svg"
@@ -46,8 +46,8 @@ const NavController = () => {
           ></Image>
         </Button>
         <Link href={"/"}>
-          <Button className="text-xl font-semibold py-4 w-full bg-white text-black">
-            <h2>Reload</h2>
+          <Button className="text-xl font-semibold py-4 w-full bg-white text-black flex flex-row gap-x-4">
+            <h2>Back To Menu</h2>
             <Image
               src="/images/Reload.svg"
               alt="Downoad Button"

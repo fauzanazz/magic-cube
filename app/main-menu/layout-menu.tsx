@@ -10,6 +10,7 @@ import OptionsInput from "@/components/main-menu/option-input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { PixelLoader } from "@/components/main-menu/loader";
 
 export enum AlgorithmEnum {
   Sideways = "Sideways Hill Climbing",
@@ -91,14 +92,15 @@ export const menuSchema = z
 
 const LayoutMenu = () => {
   const navigate = useRouter();
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [fileContent, setFileContent] = useState<any>(null);
 
   const form = useForm<MenuData>({
     resolver: zodResolver(menuSchema),
     defaultValues: {
       algorithm: AlgorithmEnum.Ascent,
-      iteration: 0,
-      population: 0,
+      iteration: 1,
+      population: 1,
       isFile: false,
       file: null,
     },
@@ -120,14 +122,63 @@ const LayoutMenu = () => {
     );
   }
 
-  const onSubmit = (data: MenuData) => {
-    console.log("TEST DATa : ", data);
-    // Execute Data Here
-    navigate.push("/result");
+  const onSubmit = async (data: MenuData) => {
+    setLoading(true);
+    function GetAlgorithmAPI(
+      algorithm: AlgorithmEnum
+    ): null | { url: string; method: string; params?: string } {
+      const apiPath = "http://localhost:8080/api/";
+      switch (algorithm) {
+        case AlgorithmEnum.Genetic:
+          return {
+            url: apiPath + "genetic_algorithm",
+            method: "POST",
+            params: JSON.stringify({
+              population: data.population,
+              iteration: data.iteration,
+            }),
+          };
+        case AlgorithmEnum.Ascent:
+          return {
+            url: apiPath + "steepest_ascent",
+            method : "POST",
+          };
+
+        default:
+          return null;
+      }
+    }
+    const api = GetAlgorithmAPI(data.algorithm);
+    if (!api) {
+      console.error("Algorithm Api Not Found");
+    }
+
+    try {
+      const response = await fetch(api?.url!, {
+        method: api?.method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: api?.params ?? "",
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("API Response: ", result);
+      setLoading(false);
+      navigate.push("/result");
+    } catch (error) {
+      console.error("API Fetch Error: ", error);
+    }
+    setLoading(false);
   };
 
   return (
     <div className="font-pixelify flex flex-col gap-4 min-h-screen max-md:px-12 max-lg:px-20 px-36 max-md:py-12 max-lg:py-20 py-24">
+      {isLoading && <PixelLoader></PixelLoader>}
       <div className="w-full flex justify-center mb-10 text-4xl max-md:text-2xl text-center">
         <h1 className="font-bold">WELCOME TO BESOK MINGGU</h1>
       </div>
@@ -157,7 +208,11 @@ const LayoutMenu = () => {
 
             {/* Submit Button */}
             <div className="flex justify-center w-full pt-10 ">
-              <Button type="submit" className=" bg-moldy_green w-72 text-xl">
+              <Button
+                type="submit"
+                className=" bg-moldy_green w-72 text-xl h-fit"
+                disabled={isLoading}
+              >
                 Start
               </Button>
             </div>

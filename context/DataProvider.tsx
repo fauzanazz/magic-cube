@@ -1,3 +1,4 @@
+import { AlgorithmEnum } from "@/app/main-menu/layout-menu";
 import React, {
   createContext,
   useContext,
@@ -13,6 +14,7 @@ type StateEntry = [number, number];
 export type State = StateEntry[];
 
 interface DataContextType {
+  algorithm: string;
   description: any;
   stateAwal: State;
   stateAkhir: State;
@@ -25,6 +27,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
   const [stateAwal, setStateAwal] = useState<State>([]);
   const [stateAkhir, setStateAkhir] = useState<State>([]);
+  const [algorithm, setAlgorithm] = useState<string>(AlgorithmEnum.Ascent);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +43,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setDescription(json.description);
         setStateAwal(json.firstState);
         setStateAkhir(json.lastState);
+        setAlgorithm(json.algorithm);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -49,7 +53,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <DataContext.Provider value={{ description, stateAwal, stateAkhir }}>
+    <DataContext.Provider
+      value={{ description, stateAwal, stateAkhir, algorithm }}
+    >
       {children}
     </DataContext.Provider>
   );
