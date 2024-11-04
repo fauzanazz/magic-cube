@@ -6,11 +6,14 @@ import (
 )
 
 func RandomRestart(max_restart int) bool {
+	var allState [][125]int
 	restart := 0
 	iteration := 0
 	currentTime := time.Now()
 
 	initialState := lib.GenerateSuccessor()
+	allState = append(allState, initialState)
+	
 	lib.PrintStateWithLabel(initialState, "Start State")
 	globalBestState := initialState
 	globalBestCost := lib.ObjectiveFunction(globalBestState)
@@ -29,6 +32,7 @@ func RandomRestart(max_restart int) bool {
 
 			currentState = neighbor
 			currentCost = neighborCost
+			allState = append(allState, initialState)
 			iteration++
 		}
 
@@ -41,6 +45,7 @@ func RandomRestart(max_restart int) bool {
 		if restart < max_restart-1 {
 			currentState = lib.GenerateSuccessor()
 			currentCost= lib.ObjectiveFunction(currentState)
+			allState = append(allState, initialState)
 		}
 
 		restart++
@@ -63,6 +68,11 @@ func RandomRestart(max_restart int) bool {
 		"lastState":  lastState,
 	}
 
+	jsonAllState := map[string]interface{}{
+		"allState": allState,
+	}
+
+	lib.SaveStateToJson(jsonAllState)
 	lib.SaveToJson(res)
 
 	return true

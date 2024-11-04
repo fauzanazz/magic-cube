@@ -7,7 +7,9 @@ import (
 
 func Sideways(max_iteration int) bool{
     // Generate Initial Variable
+    var allState [][125]int
 	initialState := lib.GenerateSuccessor()
+    allState = append(allState, initialState)
     
     lib.PrintStateWithLabel(initialState, "Initial State: ")
 
@@ -34,6 +36,8 @@ func Sideways(max_iteration int) bool{
 
         bestState = neighbor
         bestCost = neighborCost
+        allState = append(allState, initialState)
+
         iteration++
 		
     }
@@ -53,6 +57,12 @@ func Sideways(max_iteration int) bool{
         "firstState" : firstState,
         "lastState" : lastState,
     }
+
+    jsonAllState := map[string]interface{}{
+		"allState": allState,
+	}
+    lib.SaveStateToJson(jsonAllState)
+    
     lib.PrintStateWithLabel(bestState, "Final State: ")
     lib.SaveToJson(res)
 

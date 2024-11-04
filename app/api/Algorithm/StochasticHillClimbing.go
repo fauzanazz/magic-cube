@@ -8,8 +8,10 @@ import (
 
 func StochasticHillClimbing(MaxIteration int) bool {
 	// Generate a random initial state
+	var allState [][125]int
 	initialState := lib.GenerateSuccessor()
 	lib.PrintState(initialState)
+	allState = append(allState, initialState)
 
 	stateMap := map[[125]int]bool{}
 	stateMap[initialState] = true
@@ -34,6 +36,7 @@ func StochasticHillClimbing(MaxIteration int) bool {
 		if neighborCost > bestCost {
 			bestState = neighbor
 			bestCost = neighborCost
+			allState = append(allState, bestState)
 		}
 
 		iteration++
@@ -53,6 +56,13 @@ func StochasticHillClimbing(MaxIteration int) bool {
 		"firstState": firstState,
 		"lastState":  lastState,
 	}
+
+	jsonAllState := map[string]interface{}{
+		"allState": allState,
+	}
+
+	lib.SaveStateToJson(jsonAllState)
+	
 	lib.PrintState(bestState)
 	lib.SaveToJson(res)
 

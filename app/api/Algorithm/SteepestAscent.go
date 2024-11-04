@@ -10,7 +10,9 @@ import (
 func SteepestAscent() bool{
     
     // Generate Initial State Randomly
+    var allState [][125]int
     initialState := lib.GenerateSuccessor()
+    allState = append(allState, initialState)
 
     lib.PrintState(initialState)
     
@@ -30,6 +32,8 @@ func SteepestAscent() bool{
 
         bestState = neighbor
         bestCost = neighborCost
+        allState = append(allState, initialState)
+
         iteration++
     }
     executeTime := time.Since(currentTime) 
@@ -50,6 +54,11 @@ func SteepestAscent() bool{
         "lastState" : lastState,
     }
 
+    jsonAllState := map[string]interface{}{
+		"allState": allState,
+	}
+
+	lib.SaveStateToJson(jsonAllState)
     lib.SaveToJson(res)
 
     return true;
