@@ -36,11 +36,12 @@ func main() {
 	// Path
 	router.HandleFunc("/api/steepest_ascent", SteepestAscentHandler).Methods("POST")
 	router.HandleFunc("/api/simulated_annealing", SimulatedAnneling).Methods("POST")
+	router.HandleFunc("/api/random_restart", RandomRestartHandler).Methods("POST")
 	router.HandleFunc("/api/genetic_algorithm", GeneticAlgorithm).Methods("POST")
 	router.HandleFunc("/api/stochastic_hill_climbing", StochasticHillClimbing).Methods("POST")
+	router.HandleFunc("/api/sideways",SidewaysHillClimbing).Methods("POST")
 	router.HandleFunc("/api/test_obj_func", TestObjFunc).Methods("GET")
 	router.HandleFunc("/api/test", Test).Methods("GET")
-
 	log.Fatal(http.ListenAndServe(":8080", enableCORS(router)))
 }
 
@@ -53,6 +54,25 @@ func SimulatedAnneling(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func SidewaysHillClimbing(w http.ResponseWriter, r *http.Request) {
+
+	type SidewaysRequest struct {
+		MaxIteration int `json:"iteration"`
+	}
+
+	var req SidewaysRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		req.MaxIteration = 10000
+	}
+
+	resp := Algorithm.Sideways(req.MaxIteration)
+	if resp {
+		json.NewEncoder(w).Encode("OK")
+	} else {
+		json.NewEncoder(w).Encode("Error")
+	}
+}
 func StochasticHillClimbing(w http.ResponseWriter, r *http.Request) {
 
 	type StochasticHillClimbingRequest struct {
@@ -99,9 +119,29 @@ func GeneticAlgorithm(w http.ResponseWriter, r *http.Request) {
 
 func SteepestAscentHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Steepest Ascent Completed")
+	resp := Algorithm.SteepestAscent()
+	if resp {
+		json.NewEncoder(w).Encode("OK")
+	} else {
+		json.NewEncoder(w).Encode("Error")
+	}
+}
 
-	initialState := lib.GenerateSuccessor()
-	resp := Algorithm.SteepestAscent(initialState)
+func RandomRestartHandler(w http.ResponseWriter, r *http.Request) {
+    type RandomRestartRequest struct {
+		MaxRes int `json:"iteration"`
+	}
+	
+	var req RandomRestartRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println(req)
+
+	resp := Algorithm.RandomRestart(req.MaxRes)
 	if resp {
 		json.NewEncoder(w).Encode("OK")
 	} else {

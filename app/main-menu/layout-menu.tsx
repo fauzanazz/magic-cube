@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import AlgorithmSelection from "@/components/main-menu/algorithm-input";
-import ParametersInput from "@/components/main-menu/param-input";
+import ParametersInput, { ParamsStruct } from "@/components/main-menu/param-input";
 import OptionsInput from "@/components/main-menu/option-input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -113,13 +113,36 @@ const LayoutMenu = () => {
   function isPopulation() {
     return selectedAlgorithm == AlgorithmEnum.Genetic;
   }
+
   // Check if Iteration need to be Rendered
-  function isIteration() {
-    return (
-      selectedAlgorithm == AlgorithmEnum.Sideways ||
-      selectedAlgorithm == AlgorithmEnum.RandomHill ||
-      isPopulation()
-    );
+  function IterationRendering() : ParamsStruct{
+    switch(selectedAlgorithm){
+      case AlgorithmEnum.Sideways:
+        return {
+          label: "Max Iteration",
+          value : true
+        }
+      case AlgorithmEnum.RandomHill:
+        return {
+          label: "Iteration",
+          value : true
+        }
+      case AlgorithmEnum.Genetic:
+        return {
+          label: "Max Iteration",
+          value : true
+        }
+      case AlgorithmEnum.Stochatic:
+        return{
+          label: "Max Iteration",
+          value: true,
+        }
+      default:
+        return{
+          label: "",
+          value: false,
+        }
+    }
   }
 
   const onSubmit = async (data: MenuData) => {
@@ -129,12 +152,16 @@ const LayoutMenu = () => {
       algorithm: AlgorithmEnum
     ): null | { url: string; method: string; params?: string } {
       const apiPath = "http://localhost:8080/api/";
+      console.log(algorithm);
       switch (algorithm) {
 
         case AlgorithmEnum.Stochatic:
             return {
                 url: apiPath + "stochastic_hill_climbing",
                 method: "POST",
+                params : JSON.stringify({
+                  MaxIteration : data.iteration,
+                })
             };
 
         case AlgorithmEnum.Genetic:
@@ -152,6 +179,23 @@ const LayoutMenu = () => {
             url: apiPath + "steepest_ascent",
             method : "POST",
           };
+        case AlgorithmEnum.RandomHill:
+          return{
+            url: apiPath + "random_restart",
+            method: "POST",
+            params: JSON.stringify({
+              iteration: data.iteration,
+            })
+          };
+        case AlgorithmEnum.Sideways:
+          return{
+            url: apiPath + "sideways",
+            method: "POST",
+            params : JSON.stringify({
+              iteration : data.iteration,
+            })
+
+          }
 
         case AlgorithmEnum.Annealing:
             return {
@@ -170,6 +214,7 @@ const LayoutMenu = () => {
     }
 
     try {
+
       const response = await fetch(api?.url!, {
         method: api?.method,
         headers: {
@@ -212,8 +257,8 @@ const LayoutMenu = () => {
 
             <ParametersInput
               form={form}
-              isIterationRendered={isIteration()}
-              isPopulationRendered={isPopulation()}
+              iterationRendered={IterationRendering()}
+              populationRendered={isPopulation()}
             />
             <OptionsInput
               form={form}

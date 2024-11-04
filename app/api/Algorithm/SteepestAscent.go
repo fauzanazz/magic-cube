@@ -3,12 +3,17 @@ package Algorithm
 import (
 	"magic-cube/lib"
 	"time"
+    "fmt"
 )
 
 
-func SteepestAscent(initialState [125]int) bool{
+func SteepestAscent() bool{
     
+    // Generate Initial State Randomly
+    initialState := lib.GenerateSuccessor()
+
     lib.PrintState(initialState)
+    
     iteration := 0
     currentTime := time.Now()
 
@@ -31,12 +36,14 @@ func SteepestAscent(initialState [125]int) bool{
 
     firstState := lib.ConvertToResult(initialState)
     lastState := lib.ConvertToResult(bestState)
+    fmt.Println("Steepest Ascent complete")
+	lib.PrintState(bestState)
 
     res := map[string] interface{}{
         "algorithm" : "Steepest Ascent Algorithm",
         "description" : map[string]interface{}{
             "Objective Function" : bestCost,
-            "Duration" : executeTime.String() + "ms",
+            "Duration" : executeTime.String(),
             "Jumlah Iterasi" : iteration,
         },
         "firstState" : firstState,

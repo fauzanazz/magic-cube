@@ -45,7 +45,7 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
     // Ensure the initialCubes length is 125 and IDs are unique from 1 to 125
     if (initialCubes.length === 125) {
       initialCubes.forEach((cube) => {
-        if (cube[0] >= 1 && cube[0]<= 125) {
+        if (cube[0] >= 1 && cube[0] <= 125) {
           initialNumbers[cube[0]] = cube[1];
         } else {
           console.error("Cube ID out of range: ", cube[0]);
@@ -55,7 +55,7 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
       console.warn("Initial cubes should contain exactly 125 cubes.");
 
       // Generate Random Self if error cause of inital cues contain no 125 cubes
-      for (let i = 1; i <= gridDimension ** 3; i++) {
+      for (let i = 0; i < gridDimension ** 3; i++) {
         initialNumbers[i] = Math.floor(Math.random() * 125); // Random number between 1 and 125
       }
     }
@@ -63,7 +63,7 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
     setCubeNumbers(initialNumbers);
   }, [initialCubes, gridDimension]);
 
-  let counter = 0;
+  let counter = 1;
   for (let x = 0; x < gridDimension; x++) {
     for (let y = 0; y < gridDimension; y++) {
       for (let z = 0; z < gridDimension; z++) {
