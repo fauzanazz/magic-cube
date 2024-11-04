@@ -238,6 +238,7 @@ const LayoutMenu = () => {
   };
 
   return (
+    
     <div className="font-pixelify flex flex-col gap-4 min-h-screen max-md:px-12 max-lg:px-20 px-36 max-md:py-12 max-lg:py-20 py-24">
       {isLoading && <PixelLoader></PixelLoader>}
       <div className="w-full flex justify-center mb-10 text-4xl max-md:text-2xl text-center">
