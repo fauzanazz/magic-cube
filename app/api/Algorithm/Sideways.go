@@ -8,9 +8,13 @@ import (
 func Sideways(max_iteration int) bool{
     // Generate Initial Variable
 	initialState := lib.GenerateSuccessor()
+    
+    lib.PrintStateWithLabel(initialState, "Initial State: ")
+
     iteration := 0
     currentTime := time.Now()
 
+    cached_max_iteration  := max_iteration
     bestState := initialState
     bestCost := lib.ObjectiveFunction(bestState)
 
@@ -41,6 +45,7 @@ func Sideways(max_iteration int) bool{
     res := map[string] interface{}{
         "algorithm" : "Sideways Algorithm",
         "description" : map[string]interface{}{
+            "Max Sideways Iteration" : cached_max_iteration,
             "Objective Function" : bestCost,
             "Duration" : executeTime.String(),
             "Jumlah Iterasi" : iteration,
@@ -48,7 +53,7 @@ func Sideways(max_iteration int) bool{
         "firstState" : firstState,
         "lastState" : lastState,
     }
-
+    lib.PrintStateWithLabel(bestState, "Final State: ")
     lib.SaveToJson(res)
 
     return true;

@@ -14,7 +14,7 @@ func GeneticAlgorithm(jumlah_populasi int, jumlah_generasi int) bool {
 	// populasi_awal := populasi
 	bestState := [125]int{}
 	bestCost := 0
-
+	
 	for iterasi < jumlah_generasi {
 		newGeneration := [][125]int{}
 
@@ -128,6 +128,8 @@ func GeneticAlgorithm(jumlah_populasi int, jumlah_generasi int) bool {
 
 	lastState := lib.ConvertToResult(bestState)
 	firstState := lib.ConvertToResult(bestFirstState)
+	lib.PrintStateWithLabel(bestFirstState, "Initial State")
+	lib.PrintStateWithLabel(bestState, "Last State")
 
 	res := map[string]interface{}{
 		"algorithm" : "Genetic Algorithm",
