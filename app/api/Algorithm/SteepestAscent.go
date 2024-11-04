@@ -3,6 +3,7 @@ package Algorithm
 import (
 	"magic-cube/lib"
 	"time"
+    "fmt"
 )
 
 
@@ -35,6 +36,8 @@ func SteepestAscent() bool{
 
     firstState := lib.ConvertToResult(initialState)
     lastState := lib.ConvertToResult(bestState)
+    fmt.Println("Steepest Ascent complete")
+	lib.PrintState(bestState)
 
     res := map[string] interface{}{
         "algorithm" : "Steepest Ascent Algorithm",

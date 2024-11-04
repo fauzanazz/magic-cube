@@ -152,6 +152,7 @@ const LayoutMenu = () => {
       algorithm: AlgorithmEnum
     ): null | { url: string; method: string; params?: string } {
       const apiPath = "http://localhost:8080/api/";
+      console.log(algorithm);
       switch (algorithm) {
 
         case AlgorithmEnum.Stochatic:
@@ -178,7 +179,14 @@ const LayoutMenu = () => {
             url: apiPath + "steepest_ascent",
             method : "POST",
           };
-
+        case AlgorithmEnum.RandomHill:
+          return{
+            url: apiPath + "random_restart",
+            method: "POST",
+            params: JSON.stringify({
+              iteration: data.iteration,
+            })
+          };
         case AlgorithmEnum.Sideways:
           return{
             url: apiPath + "sideways",
@@ -200,6 +208,7 @@ const LayoutMenu = () => {
     }
 
     try {
+
       const response = await fetch(api?.url!, {
         method: api?.method,
         headers: {

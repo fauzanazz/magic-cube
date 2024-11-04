@@ -36,6 +36,7 @@ func main() {
 	// Path
 	router.HandleFunc("/api/steepest_ascent", SteepestAscentHandler).Methods("POST")
 	router.HandleFunc("/api/simulated_anneling", SimulatedAnneling).Methods("GET")
+	router.HandleFunc("/api/random_restart", RandomRestartHandler).Methods("POST")
 	router.HandleFunc("/api/genetic_algorithm", GeneticAlgorithm).Methods("POST")
 	router.HandleFunc("/api/stochastic_hill_climbing", StochasticHillClimbing).Methods("POST")
 	router.HandleFunc("/api/sideways",SidewaysHillClimbing).Methods("POST")
@@ -114,6 +115,28 @@ func GeneticAlgorithm(w http.ResponseWriter, r *http.Request) {
 func SteepestAscentHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Steepest Ascent Completed")
 	resp := Algorithm.SteepestAscent()
+	if resp {
+		json.NewEncoder(w).Encode("OK")
+	} else {
+		json.NewEncoder(w).Encode("Error")
+	}
+}
+
+func RandomRestartHandler(w http.ResponseWriter, r *http.Request) {
+    type RandomRestartRequest struct {
+		MaxRes int `json:"iteration"`
+	}
+	
+	var req RandomRestartRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println(req)
+
+	resp := Algorithm.RandomRestart(req.MaxRes)
 	if resp {
 		json.NewEncoder(w).Encode("OK")
 	} else {
