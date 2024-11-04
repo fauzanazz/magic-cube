@@ -16,8 +16,11 @@ const (
 
 func SimulatedAnnealing() bool {
 	// Init
+	var allState [][125]int
 	initialState := lib.GenerateSuccessor()
 	lib.PrintStateWithLabel(initialState, "First State")
+	allState = append(allState, initialState)
+
 	stateMap := map[[125]int]bool{}
 	var plotData = make([][]float64, 0)
 
@@ -55,6 +58,7 @@ func SimulatedAnnealing() bool {
 		if deltaE > 0 {
 			currentState = neighbour
 			currentCost = neighborCost
+			allState = append(allState, currentState)
 
 		} else { // If the new solution is worse, accept it with a probability
 			stuck++
@@ -66,6 +70,7 @@ func SimulatedAnnealing() bool {
 			if probability > probabilityThreshold {
 				currentState = neighbour
 				currentCost = neighborCost
+				allState = append(allState, currentState)
 			}
 		}
 
@@ -90,6 +95,11 @@ func SimulatedAnnealing() bool {
 		"plotData":   plotData,
 	}
 
+	jsonAllState := map[string]interface{}{
+		"allState": allState,
+	}
+
+	lib.SaveStateToJson(jsonAllState)
 	lib.SaveToJson(res)
 	return true
 }

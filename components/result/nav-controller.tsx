@@ -42,16 +42,11 @@ const NavController = () => {
         <h1 className="text-3xl text-white text-center font-bold">
           Action Button
         </h1>
+        <Link href={"/result/video"}>
         <Button className="text-xl font-semibold py-4 bg-white w-full text-black flex flex-row gap-x-4">
-          <h2>Download</h2>
-          <Image
-            src="/images/Download.svg"
-            alt="Downoad Button"
-            width={31}
-            height={31}
-            className="w-8 object-contain "
-          ></Image>
+          <h2>Video</h2>
         </Button>
+        </Link>
         <Link href={"/"}>
           <Button className="text-xl font-semibold py-4 w-full bg-white text-black flex flex-row gap-x-4">
             <h2>Back To Menu</h2>
