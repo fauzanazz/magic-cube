@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+
 import { UseFormReturn } from "react-hook-form";
 import React from "react";
 import { MenuData } from "@/app/main-menu/layout-menu";

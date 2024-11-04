@@ -10,18 +10,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
+export interface ParamsStruct{
+  label : string,
+  value : boolean
+}
+
 interface Props {
   form: UseFormReturn<MenuData>;
-  isIterationRendered: boolean;
-  isPopulationRendered: boolean;
+  iterationRendered: ParamsStruct;
+  populationRendered: boolean;
+
 }
 
 const ParametersInput = ({
   form,
-  isIterationRendered,
-  isPopulationRendered,
+  iterationRendered,
+  populationRendered,
 }: Props) => {
-  const isRendered = isIterationRendered || isPopulationRendered;
+  const isRendered = iterationRendered.value || populationRendered;
   return (
     <>
       {/* If is Rendered is false, Nothing rendered */}
@@ -30,14 +36,14 @@ const ParametersInput = ({
           <h3 className="w-44 text-lg font-semibold">Parameters</h3>
           <div className="flex flex-col font-medium text-lg  gap-y-4">
             {/* Max Iteration */}
-            {isIterationRendered && (
+            {iterationRendered.value && (
               <FormField
                 control={form.control}
                 name="iteration"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="w-56 font-semibold text-primary_green">
-                      Max Iteration
+                      {iterationRendered.label}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -60,7 +66,7 @@ const ParametersInput = ({
             )}
             {/* Population */}
 
-            {isPopulationRendered && (
+            {populationRendered && (
               <FormField
                 control={form.control}
                 name="population"
