@@ -18,14 +18,20 @@ func Sideways(max_iteration int) bool{
         
         neighbor, neighborCost, _ := lib.FindHighestNeighbor(bestState)
 
-        if neighborCost < bestCost || max_iteration == 0 {
+        if neighborCost < bestCost{
             break
+        }else if(neighborCost == bestCost){
+            // Asumsi: Ga Reset ya bang klo misal dia berhasil naik
+            if(max_iteration == 0){ 
+                break
+            }
+            max_iteration--;
         }
 
         bestState = neighbor
         bestCost = neighborCost
         iteration++
-		max_iteration--
+		
     }
     executeTime := time.Since(currentTime) 
 
