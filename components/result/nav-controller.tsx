@@ -5,18 +5,24 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import NavCapsule from "./nav-link-capsule";
 import { usePathname }from "next/navigation";
+import { useState } from "react";
+import MusicLoader from "./music-loader";
+
 
 const NavController = () => {
+  const [isMute, setIsMute] = useState(false);
   const pathname = usePathname();
 
   function handleDownload() {}
-
+  function handleMute(){
+    
+  }
   return (
     <nav className=" z-10 flex flex-col fixed right-0 bg-moldy_green h-screen bg-opacity-60 w-64 items-center px-4 py-10">
       <Image
         src="/images/Joy Stick.png"
-        width={130}
-        height={130}
+        width={75}
+        height={75}
         alt="Controller Image"
       ></Image>
       <div className="flex flex-col gap-y-8 w-full mt-7">
@@ -32,7 +38,7 @@ const NavController = () => {
         <NavCapsule isActive= {pathname === "/result/deskripsi"} href="/result/deskripsi" label="Deskripsi"></NavCapsule>
       </div>
 
-      <div className="flex flex-col w-full gap-y-8 mt-20">
+      <div className="flex flex-col w-full gap-y-8 mt-10">
         <h1 className="text-3xl text-white text-center font-bold">
           Action Button
         </h1>
@@ -59,6 +65,9 @@ const NavController = () => {
           </Button>
         </Link>
       </div>
+      <MusicLoader>
+          
+          </MusicLoader>
     </nav>
   );
 };
