@@ -2,6 +2,7 @@ package lib
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
@@ -24,15 +25,25 @@ func NotIn(value int, arr [125]int) bool {
 }
 
 func PrintState(state [125]int) {
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			for k := 0; k < 5; k++ {
-				print(state[i*25+j*5+k], " ")
+	for i := 4; i >= 0; i-- {
+	// for i := 0; i < 5; i++ {
+		// for j:= 4; j >= 0; j-- {
+		for j:= 0; j < 5; j++ {
+			startIdx := 25 * j
+			// for k:= 0; k < 5; k++ {
+			for k:= 4; k >= 0; k-- {
+				// fmt.Printf("%d ", startIdx+j*5+k)
+				fmt.Print(state[startIdx+i*5+k], " ")
 			}
 			println()
 		}
 		println()
 	}
+}
+
+func PrintStateWithLabel(state [125]int, label string){
+	fmt.Println(label)
+	PrintState(state)
 }
 
 func SaveToJson(res any) {

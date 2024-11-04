@@ -11,6 +11,7 @@ func RandomRestart(max_restart int) bool {
 	currentTime := time.Now()
 
 	initialState := lib.GenerateSuccessor()
+	lib.PrintStateWithLabel(initialState, "Start State")
 	globalBestState := initialState
 	globalBestCost := lib.ObjectiveFunction(globalBestState)
 	currentState := globalBestState
@@ -49,7 +50,7 @@ func RandomRestart(max_restart int) bool {
 
 	firstState := lib.ConvertToResult(initialState)
 	lastState := lib.ConvertToResult(globalBestState)
-
+	lib.PrintStateWithLabel(globalBestState, "Final State")
 	res := map[string]interface{}{
 		"algorithm": "Random Restart Algorithm",
 		"description": map[string]interface{}{

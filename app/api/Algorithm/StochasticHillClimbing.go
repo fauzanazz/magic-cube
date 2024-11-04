@@ -9,7 +9,7 @@ import (
 func StochasticHillClimbing(MaxIteration int) bool {
 	// Generate a random initial state
 	initialState := lib.GenerateSuccessor()
-
+	lib.PrintState(initialState)
 	iteration := 0
 	currentTime := time.Now()
 
@@ -45,7 +45,7 @@ func StochasticHillClimbing(MaxIteration int) bool {
 		"firstState": firstState,
 		"lastState":  lastState,
 	}
-
+	lib.PrintState(bestState)
 	lib.SaveToJson(res)
 
 	return true

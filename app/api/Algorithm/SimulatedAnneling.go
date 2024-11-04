@@ -2,6 +2,7 @@ package Algorithm
 
 import (
 	"fmt"
+	
 	"math"
 	"math/rand"
 	"time"
@@ -19,6 +20,7 @@ var (
 func SimulatedAnneling() {
 	// Generate a random initial state
 	initialState := randomStateGenerator()
+	
 
 	// Set the initial temperature
 	temperature := startingTemperature

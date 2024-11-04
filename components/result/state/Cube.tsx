@@ -37,7 +37,7 @@ const Cube: React.FC<CubeProps> = ({
         color={text_color}
         anchorX="center"
         anchorY="middle"
-        rotation={[-Math.PI / 2, 0, 0]}
+        rotation={[-Math.PI / 2, 0, Math.PI / 2]}
         fontWeight="bold"
       >
         {number}
