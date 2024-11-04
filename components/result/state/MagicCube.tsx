@@ -18,7 +18,7 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
 
   const GeneratedColor = [
     "#585bf2" /* Blue */,
-    "#fe9941" /* Orange */,
+    "#fe6941" /* Orange */,
     "#fefd32" /* Yellow */,
     "#ff3d44" /* Red */,
     "#30cc4b" /* Green */,
@@ -97,9 +97,10 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
 
   return (
     <Canvas
-      style={{ height: "100vh" }}
+      style={{ height: "100vh", backgroundColor: "black" }}
       camera={{ position: [5, 5, 5], fov: 80 }}
     >
+      
       <ambientLight intensity={2} />
       <pointLight position={[10, 10, 10]} />
       {cubes}
