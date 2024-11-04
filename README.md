@@ -58,3 +58,15 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Task and Member
+| Task                                  | Member                                   |
+|---------------------------------------|------------------------------------------|
+| Visualization (Front-End)             | 13522157 - Muhammad Davis Adhipramana    |
+| Objective Function                    | 13522164 - Valentino Chryslie Triadi     |
+| Steepest Ascent Hill-Climbing         | 13522134 - Shabrina Maharani             |
+| Hill-Climbing with Sideways Move      | 13522157 - Muhammad Davis Adhipramana    |
+| Random Restart Hill-Climbing          | 13522134 - Shabrina Maharani             |
+| Stochastic Hill-Climbing              | 13522153 - Muhammad Fauzan Azhim         |
+| Simulated Annealing                   | 13522153 - Muhammad Fauzan Azhim         |
+| Genetic Algorithm                     | 13522164 - Valentino Chryslie Triadi     |
