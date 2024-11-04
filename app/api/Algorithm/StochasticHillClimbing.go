@@ -39,7 +39,7 @@ func StochasticHillClimbing(MaxIteration int) bool {
 		"algorithm": "Stochastic Hill Climbing",
 		"description": map[string]interface{}{
 			"Objective Function": bestCost,
-			"Duration":           strconv.FormatInt(executeTime, 10),
+			"Duration":           strconv.FormatInt(executeTime, 10) + " ms",
 			"Jumlah Iterasi":     iteration,
 		},
 		"firstState": firstState,
