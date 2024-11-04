@@ -24,24 +24,24 @@ export function AnnealingPlot({ data }: AnnealingPlotProps) {
         : [];
 
     let intensity = 0.1;
-    let smoothedPlotData = plotData;
+    let smoothedPlotData: { x: number; y: number }[] = plotData;
 
     while (smoothedPlotData.length > 5000) {
         smoothedPlotData = simplify(plotData, intensity, true);
         intensity += 0.1;
     }
 
-    smoothedPlotData = smoothedPlotData.map((item) => ({
+    const finalPlotData = smoothedPlotData.map((item) => ({
         iteration: item.x,
         probability: item.y,
     }));
 
     const chartData = {
-        labels: smoothedPlotData.map(item => `Iteration ${item.iteration}`),
+        labels: finalPlotData.map(item => `Iteration ${item.iteration}`),
         datasets: [
             {
                 label: 'Probability',
-                data: smoothedPlotData.map(item => item.probability),
+                data: finalPlotData.map(item => item.probability),
                 borderColor: '#2563eb',
                 backgroundColor: 'rgba(37, 99, 235, 0.4)',
                 fill: true,
