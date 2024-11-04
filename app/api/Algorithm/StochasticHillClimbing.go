@@ -10,7 +10,11 @@ func StochasticHillClimbing(MaxIteration int) bool {
 	// Generate a random initial state
 	initialState := lib.GenerateSuccessor()
 	lib.PrintState(initialState)
-	iteration := 0
+
+	stateMap := map[[125]int]bool{}
+	stateMap[initialState] = true
+
+	iteration := 1
 	currentTime := time.Now()
 
 	bestState := initialState
@@ -21,7 +25,11 @@ func StochasticHillClimbing(MaxIteration int) bool {
 			break
 		}
 
-		neighbor, neighborCost := lib.RandomNeighbor(bestState)
+		neighbor, neighborCost := lib.RandomNeighbor(bestState, &stateMap)
+		if neighborCost == -1 {
+			break
+		}
+		stateMap[neighbor] = true
 
 		if neighborCost > bestCost {
 			bestState = neighbor

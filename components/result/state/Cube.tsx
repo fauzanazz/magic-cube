@@ -17,11 +17,9 @@ interface CubeProps {
 
 const Cube: React.FC<CubeProps> = ({
   position,
-  id,
   text_color,
   cube_color,
   number,
-  onSwap,
   size = [1, 1, 1],
 }) => {
   const meshRef = useRef<THREE.Mesh>(null);
