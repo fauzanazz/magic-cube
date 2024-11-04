@@ -74,18 +74,24 @@ func RandomNeighbor(state [125]int, stateMap *map[[125]int]bool) ([125]int, int)
 	var neighbor [125]int
 	iteration := 0
 	for {
-		if iteration > 7750 {
+		if iteration > 15624 {
 			return state, -1
 		}
 
 		i := RandomInt(0, 125)
 		j := RandomInt(0, 125)
+
+		if i == j {
+			continue
+		}
+
 		neighbor = state
 		neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
 
-		if i != j && !(*stateMap)[neighbor] {
+		if !(*stateMap)[neighbor] {
 			break
 		}
+
 		iteration++
 	}
 	cost := ObjectiveFunction(neighbor)

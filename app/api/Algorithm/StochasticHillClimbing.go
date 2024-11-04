@@ -12,7 +12,7 @@ func StochasticHillClimbing(MaxIteration int) bool {
 	stateMap := map[[125]int]bool{}
 	stateMap[initialState] = true
 
-	iteration := 0
+	iteration := 1
 	currentTime := time.Now()
 
 	bestState := initialState

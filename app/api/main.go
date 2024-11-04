@@ -45,7 +45,7 @@ func main() {
 }
 
 func SimulatedAnneling(w http.ResponseWriter, r *http.Request) {
-	resp := Algorithm.SimulatedAnneling()
+	resp := Algorithm.SimulatedAnnealing()
 	if resp {
 		json.NewEncoder(w).Encode("OK")
 	} else {
