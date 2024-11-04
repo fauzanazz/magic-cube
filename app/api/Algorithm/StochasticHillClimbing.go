@@ -2,6 +2,7 @@ package Algorithm
 
 import (
 	"magic-cube/lib"
+	"strconv"
 	"time"
 )
 
@@ -30,7 +31,7 @@ func StochasticHillClimbing(MaxIteration int) bool {
 		iteration++
 	}
 
-	executeTime := time.Since(currentTime)
+	executeTime := time.Since(currentTime).Milliseconds()
 	firstState := lib.ConvertToResult(initialState)
 	lastState := lib.ConvertToResult(bestState)
 
@@ -38,7 +39,7 @@ func StochasticHillClimbing(MaxIteration int) bool {
 		"algorithm": "Stochastic Hill Climbing",
 		"description": map[string]interface{}{
 			"Objective Function": bestCost,
-			"Duration":           executeTime.String() + "ms",
+			"Duration":           strconv.FormatInt(executeTime, 10) + "ms",
 			"Jumlah Iterasi":     iteration,
 		},
 		"firstState": firstState,
