@@ -14,52 +14,67 @@ import (
 
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	
+
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTION")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-
 		log.Printf("Received request: %s %s", r.Method, r.URL.Path)
 
 		if r.Method == http.MethodOptions {
-            w.WriteHeader(http.StatusOK)
-            return
-        }
+			w.WriteHeader(http.StatusOK)
+			return
+		}
 
-		// Call the next handler in the chain
 		next.ServeHTTP(w, r)
 	})
 }
 
-
-
 func main() {
 	router := mux.NewRouter()
 
-	
 	// Path
 	router.HandleFunc("/api/steepest_ascent", SteepestAscentHandler).Methods("POST")
 	router.HandleFunc("/api/simulated_anneling", SimulatedAnneling).Methods("GET")
 	router.HandleFunc("/api/genetic_algorithm", GeneticAlgorithm).Methods("POST")
+	router.HandleFunc("/api/stochastic_hill_climbing", StochasticHillClimbing).Methods("POST")
 	router.HandleFunc("/api/test_obj_func", TestObjFunc).Methods("GET")
 	router.HandleFunc("/api/test", Test).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", enableCORS(router)))
-	
 }
 
 func SimulatedAnneling(w http.ResponseWriter, r *http.Request) {
-	Algorithm.SimulatedAnneling()
+	//Algorithm.SimulatedAnneling()
+}
+
+func StochasticHillClimbing(w http.ResponseWriter, r *http.Request) {
+
+	type StochasticHillClimbingRequest struct {
+		MaxIteration int `json:"MaxIteration"`
+	}
+
+	var req StochasticHillClimbingRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		req.MaxIteration = 10000
+	}
+
+	resp := Algorithm.StochasticHillClimbing(req.MaxIteration)
+	if resp {
+		json.NewEncoder(w).Encode("OK")
+	} else {
+		json.NewEncoder(w).Encode("Error")
+	}
 }
 
 func GeneticAlgorithm(w http.ResponseWriter, r *http.Request) {
-	
+
 	type GeneticAlgorithmRequest struct {
 		Population int `json:"population"`
 		Iteration  int `json:"iteration"`
 	}
-	
+
 	var req GeneticAlgorithmRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -78,8 +93,8 @@ func GeneticAlgorithm(w http.ResponseWriter, r *http.Request) {
 }
 
 func SteepestAscentHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Println("Steepest Ascent Completed")
-	
+	fmt.Println("Steepest Ascent Completed")
+
 	initialState := lib.GenerateSuccessor()
 	resp := Algorithm.SteepestAscent(initialState)
 	if resp {

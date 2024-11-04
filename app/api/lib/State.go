@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+var (
+	randomizer = rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+)
+
 func GeneratePopulation(jumlah_populasi int) [][125]int {
 	// Generate a random initial state
 	populasi := make([][125]int, jumlah_populasi)
@@ -12,7 +16,6 @@ func GeneratePopulation(jumlah_populasi int) [][125]int {
 		populasi[i] = GenerateSuccessor()
 	}
 	return populasi
-
 }
 
 func GenerateSuccessor() [125]int {
@@ -32,10 +35,10 @@ func GenerateSuccessor() [125]int {
 		121, 122, 123, 124, 125,
 	}
 
-	rand.New(rand.NewSource(time.Now().UnixNano()))
-	rand.Shuffle(len(initList), func(i, j int) {
+	randomizer.Shuffle(len(initList), func(i, j int) {
 		initList[i], initList[j] = initList[j], initList[i]
 	})
+
 	successor := initList
 	return successor
 }
