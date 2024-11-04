@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import Cube from "./Cube";
 import { State } from "@/types/state";
+import { StarBackground } from "./Background";
 
 export interface CubeGridProps {
   initialCubes: State;
@@ -19,7 +20,7 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
 
   const GeneratedColor = [
     "#585bf2" /* Blue */,
-    "#fe6941" /* Orange */,
+    "#fe9941" /* Orange */,
     "#fefd32" /* Yellow */,
     "#ff3d44" /* Red */,
     "#30cc4b" /* Green */,
@@ -94,16 +95,16 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
   }
 
   return (
-    <Canvas
-      style={{ height: "100vh", backgroundColor: "black" }}
-      camera={{ position: [5, 5, 5], fov: 80 }}
-    >
-      
-      <ambientLight intensity={2} />
-      <pointLight position={[10, 10, 10]} />
-      {cubes}
-      <OrbitControls />
-    </Canvas>
+    <div className='w-full h-auto fixed inset-0 -z-1'>  
+      <Canvas className="bg-black" camera={{position: [5, 5, 5], fov: 80 }}>
+        
+          <StarBackground />
+
+          {cubes}
+          <OrbitControls />
+        
+      </Canvas>
+    </div>
   );
 };
 
