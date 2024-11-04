@@ -1,5 +1,5 @@
 # Solving the Diagonal Magic Cube with a Local Search Algorithm
-
+<img src="public/Images/messageImage_1730737841195.jpg">
 This project implements a search algorithm to solve the 5x5x5 Diagonal Magic Cube problem using a local search approach. The problem requires that each row, column, pillar, and diagonal within the cube satisfies a constant called the magic number. This project is built as a web application to visualize the solution steps and facilitate analysis.
 
 ## List of Algorithms
@@ -20,44 +20,61 @@ This project implements a search algorithm to solve the 5x5x5 Diagonal Magic Cub
 ### 5. **Genetic Algorithm**
    - Utilizes selection, mutation, and crossover to evolve solutions from generation to generation until an optimal solution is reached.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Technology Used
+- Go version 1.22
+- Next js
+
+
 
 ## Getting Started
 
-First, run the development server:
+### Front-End Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Install Dependencies**: Open your terminal in the project directory and install the necessary dependencies by running:
+   
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Start Development Server**: After installation, start the development server with the following command:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```bash
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. **Access the Application**: Once the server is running, open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+### Back-End Setup
+
+1. **Navigate to API Directory**: Change to the API directory in the backend by running:
+
+   ```bash
+   cd src/app/api
+   ```
+
+2. **Build the Backend**: Compile the Go code by executing:
+
+   ```bash
+   go build
+   ```
+
+3. **Run the Backend**: Start the backend server by running:
+
+   ```bash
+   go run .
+   ```
 
 ## How To Use
 
-## Learn More
+1. **Run Both Frontend and Backend**: Ensure that both the frontend and backend servers are running by following the setup steps above.
 
-To learn more about Next.js, take a look at the following resources:
+2. **Open the Application**: In your browser, go to [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Choose an Algorithm**: Select the algorithm you want to use from the options provided, and fill in any required fields.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Start and Enjoy**: Click to begin the process and observe the results. Enjoy exploring the functionalities of the application!✨
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 ## Task and Member
 | Task                                  | Member                                   |
