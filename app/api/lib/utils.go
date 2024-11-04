@@ -47,33 +47,45 @@ func SaveToJson(res any) {
 		log.Fatal(err)
 	}
 }
+
 func FindHighestNeighbor(state [125]int) ([125]int, int, int) {
-    var bestNeighbor [125]int
-    bestCost := -1 
-    successorCount := 0
+	var bestNeighbor [125]int
+	bestCost := -1
+	successorCount := 0
 
-    for i := 0; i < 125; i++ {
-        for j := i + 1; j < 125; j++ {
-            newNeighbor := state
-            newNeighbor[i], newNeighbor[j] = newNeighbor[j], newNeighbor[i]
-            successorCount++
+	for i := 0; i < 125; i++ {
+		for j := i + 1; j < 125; j++ {
+			newNeighbor := state
+			newNeighbor[i], newNeighbor[j] = newNeighbor[j], newNeighbor[i]
+			successorCount++
 
-            cost := ObjectiveFunction(newNeighbor)
+			cost := ObjectiveFunction(newNeighbor)
 
-            if cost > bestCost {
-                bestCost = cost
-                bestNeighbor = newNeighbor
-            
-        }
-    }
-    }
-    return bestNeighbor, bestCost, successorCount
+			if cost > bestCost {
+				bestCost = cost
+				bestNeighbor = newNeighbor
+			}
+		}
+	}
+	return bestNeighbor, bestCost, successorCount
 }
 
-func ConvertToResult(list [125]int) [][]int{
+func RandomNeighbor(state [125]int) ([125]int, int) {
+	var neighbor [125]int
+	copy(neighbor[:], state[:])
+	i := RandomInt(0, 125)
+	j := RandomInt(0, 125)
+	neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
+
+	cost := ObjectiveFunction(neighbor)
+
+	return neighbor, cost
+}
+
+func ConvertToResult(list [125]int) [][]int {
 	res := make([][]int, 125)
-	for i := range res{
-		res[i] = make([]int,2)
+	for i := range res {
+		res[i] = make([]int, 2)
 		res[i][0] = i + 1
 		res[i][1] = list[i]
 	}

@@ -124,11 +124,19 @@ const LayoutMenu = () => {
 
   const onSubmit = async (data: MenuData) => {
     setLoading(true);
+
     function GetAlgorithmAPI(
       algorithm: AlgorithmEnum
     ): null | { url: string; method: string; params?: string } {
       const apiPath = "http://localhost:8080/api/";
       switch (algorithm) {
+
+        case AlgorithmEnum.Stochatic:
+            return {
+                url: apiPath + "stochastic_hill_climbing",
+                method: "POST",
+            };
+
         case AlgorithmEnum.Genetic:
           return {
             url: apiPath + "genetic_algorithm",
@@ -138,6 +146,7 @@ const LayoutMenu = () => {
               iteration: data.iteration,
             }),
           };
+
         case AlgorithmEnum.Ascent:
           return {
             url: apiPath + "steepest_ascent",
@@ -148,6 +157,7 @@ const LayoutMenu = () => {
           return null;
       }
     }
+
     const api = GetAlgorithmAPI(data.algorithm);
     if (!api) {
       console.error("Algorithm Api Not Found");
@@ -189,7 +199,6 @@ const LayoutMenu = () => {
 
         <Form {...form}>
           <form
-            action="POST"
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6 "
           >
