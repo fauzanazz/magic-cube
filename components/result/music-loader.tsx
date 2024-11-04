@@ -16,8 +16,7 @@ const MusicLoader = () => {
     
     const nextTrack = (currentTrack + 1) % playlist.length;
     setCurrentTrack(nextTrack);
-    audioRef.current.src = playlist[nextTrack];
-    audioRef.current.play();
+    
   };
 
   useEffect(() => {
