@@ -1,5 +1,7 @@
-import { State } from "@/context/DataProvider";
+"use client";
+
 import { CubeGridProps } from "./MagicCube";
+import { State } from "@/types/state";
 
 interface Props {
   title: string;

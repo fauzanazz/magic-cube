@@ -1,117 +1,213 @@
+//package Algorithm
+//
+//import (
+//	"magic-cube/lib"
+//	"math"
+//	"strconv"
+//	"time"
+//)
+//
+//const (
+//	startingTemperature  = 945.0
+//	coolingRate          = 0.99
+//	probabilityThreshold = 0.5
+//	maxIteration         = 100000
+//)
+//
+//func SimulatedAnnealing() bool {
+//	// Init
+//	initialState := lib.GenerateSuccessor()
+//	stateMap := map[[125]int]bool{}
+//	var plotData = make([][]float64, 0)
+//
+//	// Set the current state to the initial state
+//	currentState := initialState
+//	stateMap[currentState] = true
+//	currentCost := lib.ObjectiveFunction(currentState)
+//
+//	// Variables
+//	stuck := 0
+//	var neighbour [125]int
+//	var neighborCost int
+//	var temperature float64
+//
+//	currentTime := time.Now()
+//	iteration := 1
+//	for iteration <= maxIteration {
+//		// Cool the temperature
+//		temperature = startingTemperature * math.Pow(coolingRate, float64(iteration))
+//		if temperature-0.0001 < 0 {
+//			break
+//		}
+//
+//		// Get a new neighbour
+//		neighbour, neighborCost = lib.RandomNeighbor(currentState, &stateMap)
+//		if neighborCost == -1 {
+//			break
+//		}
+//		stateMap[neighbour] = true
+//
+//		// Calculate the cost difference
+//		deltaE := neighborCost - currentCost
+//
+//		// If the new solution is better, accept it
+//		if deltaE > 0 {
+//			currentState = neighbour
+//			currentCost = neighborCost
+//
+//		} else { // If the new solution is worse, accept it with a probability
+//			stuck++
+//
+//			probability := acceptanceProbability(currentCost, neighborCost, temperature)
+//			plotData = append(plotData, []float64{float64(iteration), probability})
+//
+//			// If the probability is greater than the threshold, accept the new solution
+//			if probability > probabilityThreshold {
+//				currentState = neighbour
+//				currentCost = neighborCost
+//			}
+//		}
+//
+//		iteration++
+//	}
+//
+//	executeTime := time.Since(currentTime).Milliseconds()
+//	firstState := lib.ConvertToResult(initialState)
+//	lastState := lib.ConvertToResult(currentState)
+//
+//	res := map[string]interface{}{
+//		"algorithm": "Simulated Annealing",
+//		"description": map[string]interface{}{
+//			"Objective Function": currentCost,
+//			"Duration":           strconv.FormatInt(executeTime, 10) + "ms",
+//			"Jumlah Iterasi":     iteration,
+//			"Frekuensi Stuck":    stuck,
+//		},
+//		"firstState": firstState,
+//		"lastState":  lastState,
+//		"plotData":   plotData,
+//	}
+//
+//	lib.SaveToJson(res)
+//	return true
+//}
+//
+//func acceptanceProbability(currentCost int, neighborCost int, temperature float64) float64 {
+//	if temperature == 0 {
+//		return 0
+//	}
+//
+//	probability := math.Exp(float64(neighborCost-currentCost) / temperature)
+//	if math.IsInf(probability, 0) {
+//		return 1
+//	}
+//
+//	return probability
+//}
+
 package Algorithm
 
 import (
-	"fmt"
+	"magic-cube/lib"
 	"math"
-	"math/rand"
+	"strconv"
 	"time"
 )
 
 const (
-	startingTemperature = 1000.0
-	coolingRate         = 0.003
+	startingTemperature  = 945.0
+	coolingRate          = 0.9999
+	probabilityThreshold = 0.9999
+	maxIteration         = 100000
 )
 
-var (
-	randomizer = rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
-)
-
-func SimulatedAnneling() {
-	// Generate a random initial state
-	initialState := randomStateGenerator()
-
-	// Set the initial temperature
-	temperature := startingTemperature
+func SimulatedAnnealing() bool {
+	// Init
+	initialState := lib.GenerateSuccessor()
+	stateMap := map[[125]int]bool{}
+	var plotData = make([][]float64, 0)
 
 	// Set the current state to the initial state
 	currentState := initialState
+	stateMap[currentState] = true
+	currentCost := lib.ObjectiveFunction(currentState)
 
-	neighbour := randomNeighbour(currentState)
+	// Variables
+	stuck := 0
+	var neighbour [125]int
+	var neighborCost int
+	var temperature float64
 
-	for ok := true; ok; ok = costFunction(neighbour) < costFunction(currentState) {
-		// Calculate the acceptance probability
-		acceptanceProbability := math.Exp(float64(costFunction(neighbour)-costFunction(currentState)) / temperature)
-
-		// If the neighbour is better, accept it
-		if costFunction(neighbour) < costFunction(currentState) {
-			currentState = neighbour
-		} else if randomizer.Float64() < acceptanceProbability {
-			currentState = neighbour
-		}
-
+	currentTime := time.Now()
+	iteration := 1
+	for iteration <= maxIteration {
 		// Cool the temperature
-		temperature *= 1 - coolingRate
+		temperature = startingTemperature * math.Pow(coolingRate, float64(iteration))
+		if temperature-0.1 < 0 {
+			break
+		}
 
 		// Get a new neighbour
-		neighbour = randomNeighbour(currentState)
-	}
+		neighbour, neighborCost = lib.RandomNeighbor(currentState, &stateMap)
+		if neighborCost == -1 {
+			break
+		}
+		stateMap[neighbour] = true
 
-	fmt.Println("Final state: ", currentState)
-	fmt.Println("Final cost: ", costFunction(currentState))
-}
+		// Calculate the cost difference
+		deltaE := neighborCost - currentCost
 
-func randomStateGenerator() [5][5][5]int {
-	var state [5][5][5]int
+		// If the new solution is better, accept it
+		if deltaE > 0 {
+			currentState = neighbour
+			currentCost = neighborCost
 
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			for k := 0; k < 5; k++ {
-				number := i + j*5 + k*25
-				state[i][j][k] = number
+		} else { // If the new solution is worse, accept it with a probability
+			stuck++
+
+			probability := acceptanceProbability(currentCost, neighborCost, temperature)
+			plotData = append(plotData, []float64{float64(iteration), probability})
+
+			// If the probability is greater than the threshold, accept the new solution
+			if probability > probabilityThreshold {
+				currentState = neighbour
+				currentCost = neighborCost
 			}
 		}
+
+		iteration++
 	}
 
-	randomShuffle(&state)
+	executeTime := time.Since(currentTime).Milliseconds()
+	firstState := lib.ConvertToResult(initialState)
+	lastState := lib.ConvertToResult(currentState)
 
-	return state
-}
-
-func randomShuffle(state *[5][5][5]int) {
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			for k := 0; k < 5; k++ {
-				i1 := randomizer.Intn(5)
-				j1 := randomizer.Intn(5)
-				k1 := randomizer.Intn(5)
-
-				temp := state[i1][j1][k1]
-				state[i1][j1][k1] = state[i][j][k]
-				state[i][j][k] = temp
-			}
-		}
+	res := map[string]interface{}{
+		"algorithm": "Simulated Annealing",
+		"description": map[string]interface{}{
+			"Objective Function": currentCost,
+			"Duration":           strconv.FormatInt(executeTime, 10) + "ms",
+			"Jumlah Iterasi":     iteration,
+			"Frekuensi Stuck":    stuck,
+		},
+		"firstState": firstState,
+		"lastState":  lastState,
+		"plotData":   plotData,
 	}
+
+	lib.SaveToJson(res)
+	return true
 }
 
-func costFunction(state [5][5][5]int) int {
-	// Calculate the cost of the state
-	cost := 0
-	return cost
-}
+func acceptanceProbability(currentCost int, neighborCost int, temperature float64) float64 {
+	if temperature == 0 {
+		return 0
+	}
 
-func randomNeighbour(state [5][5][5]int) [5][5][5]int {
-	// Swap two random elements in the state
-	return randomSwap(state)
-}
+	probability := math.Exp(float64(neighborCost-currentCost) / temperature)
+	if math.IsInf(probability, 0) {
+		return 1
+	}
 
-func randomSwap(state [5][5][5]int) [5][5][5]int {
-	// Swap two random elements in the state
-
-	// Get the first random element
-	i1 := randomizer.Intn(5)
-	j1 := randomizer.Intn(5)
-	k1 := randomizer.Intn(5)
-
-	// Get the second random element
-	i2 := randomizer.Intn(5)
-	j2 := randomizer.Intn(5)
-	k2 := randomizer.Intn(5)
-
-	// Swap the elements
-	temp := state[i1][j1][k1]
-	state[i1][j1][k1] = state[i2][j2][k2]
-	state[i2][j2][k2] = temp
-
-	// Return the new state
-	return state
+	return probability
 }
