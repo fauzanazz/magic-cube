@@ -70,15 +70,25 @@ func FindHighestNeighbor(state [125]int) ([125]int, int, int) {
 	return bestNeighbor, bestCost, successorCount
 }
 
-func RandomNeighbor(state [125]int) ([125]int, int) {
+func RandomNeighbor(state [125]int, stateMap *map[[125]int]bool) ([125]int, int) {
 	var neighbor [125]int
-	copy(neighbor[:], state[:])
-	i := RandomInt(0, 125)
-	j := RandomInt(0, 125)
-	neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
+	iteration := 0
+	for {
+		if iteration > 7750 {
+			return state, -1
+		}
 
+		i := RandomInt(0, 125)
+		j := RandomInt(0, 125)
+		neighbor = state
+		neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
+
+		if i != j && !(*stateMap)[neighbor] {
+			break
+		}
+		iteration++
+	}
 	cost := ObjectiveFunction(neighbor)
-
 	return neighbor, cost
 }
 
