@@ -2,6 +2,7 @@
 
 import { CubeGridProps } from "./MagicCube";
 import { State } from "@/types/state";
+import React from "react";
 
 interface Props {
   title: string;
