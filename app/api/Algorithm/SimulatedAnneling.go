@@ -1,117 +1,76 @@
 package Algorithm
 
 import (
-	"fmt"
+	"magic-cube/lib"
 	"math"
-	"math/rand"
+	"strconv"
 	"time"
 )
 
 const (
-	startingTemperature = 1000.0
-	coolingRate         = 0.003
+	startingTemperature = 10000.0
+	coolingRate         = 0.000001
 )
 
 var (
-	randomizer = rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+	probabilityTreshold = 0.5
 )
 
-func SimulatedAnneling() {
+func SimulatedAnneling() bool {
 	// Generate a random initial state
-	initialState := randomStateGenerator()
+	initialState := lib.GenerateSuccessor()
 
 	// Set the initial temperature
 	temperature := startingTemperature
 
 	// Set the current state to the initial state
 	currentState := initialState
+	currentCost := lib.ObjectiveFunction(currentState)
 
-	neighbour := randomNeighbour(currentState)
+	iteration := 0
+	currentTime := time.Now()
+	neighbour, neighborcost := lib.RandomNeighbor(currentState)
 
-	for ok := true; ok; ok = costFunction(neighbour) < costFunction(currentState) {
+	for ok := true; ok; ok = temperature > 0.1 {
 		// Calculate the acceptance probability
-		acceptanceProbability := math.Exp(float64(costFunction(neighbour)-costFunction(currentState)) / temperature)
+		probability := acceptanceProbability(neighborcost, currentCost, temperature)
 
-		// If the neighbour is better, accept it
-		if costFunction(neighbour) < costFunction(currentState) {
+		if neighborcost > currentCost || probability > probabilityTreshold {
 			currentState = neighbour
-		} else if randomizer.Float64() < acceptanceProbability {
-			currentState = neighbour
+			currentCost = neighborcost
 		}
 
 		// Cool the temperature
 		temperature *= 1 - coolingRate
 
 		// Get a new neighbour
-		neighbour = randomNeighbour(currentState)
+		neighbour, neighborcost = lib.RandomNeighbor(currentState)
+
+		iteration++
 	}
 
-	fmt.Println("Final state: ", currentState)
-	fmt.Println("Final cost: ", costFunction(currentState))
-}
+	executeTime := time.Since(currentTime).Milliseconds()
+	firstState := lib.ConvertToResult(initialState)
+	lastState := lib.ConvertToResult(currentState)
 
-func randomStateGenerator() [5][5][5]int {
-	var state [5][5][5]int
-
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			for k := 0; k < 5; k++ {
-				number := i + j*5 + k*25
-				state[i][j][k] = number
-			}
-		}
+	res := map[string]interface{}{
+		"algorithm": "Simulated Annealing",
+		"description": map[string]interface{}{
+			"Objective Function": currentCost,
+			"Duration":           strconv.FormatInt(executeTime, 10) + "ms",
+			"Jumlah Iterasi":     iteration,
+		},
+		"firstState": firstState,
+		"lastState":  lastState,
 	}
 
-	randomShuffle(&state)
-
-	return state
+	lib.SaveToJson(res)
+	return true
 }
 
-func randomShuffle(state *[5][5][5]int) {
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			for k := 0; k < 5; k++ {
-				i1 := randomizer.Intn(5)
-				j1 := randomizer.Intn(5)
-				k1 := randomizer.Intn(5)
-
-				temp := state[i1][j1][k1]
-				state[i1][j1][k1] = state[i][j][k]
-				state[i][j][k] = temp
-			}
-		}
+func acceptanceProbability(energy int, newEnergy int, temperature float64) float64 {
+	if newEnergy < energy {
+		return 1.0
 	}
-}
-
-func costFunction(state [5][5][5]int) int {
-	// Calculate the cost of the state
-	cost := 0
-	return cost
-}
-
-func randomNeighbour(state [5][5][5]int) [5][5][5]int {
-	// Swap two random elements in the state
-	return randomSwap(state)
-}
-
-func randomSwap(state [5][5][5]int) [5][5][5]int {
-	// Swap two random elements in the state
-
-	// Get the first random element
-	i1 := randomizer.Intn(5)
-	j1 := randomizer.Intn(5)
-	k1 := randomizer.Intn(5)
-
-	// Get the second random element
-	i2 := randomizer.Intn(5)
-	j2 := randomizer.Intn(5)
-	k2 := randomizer.Intn(5)
-
-	// Swap the elements
-	temp := state[i1][j1][k1]
-	state[i1][j1][k1] = state[i2][j2][k2]
-	state[i2][j2][k2] = temp
-
-	// Return the new state
-	return state
+	return math.Exp(float64(energy-newEnergy) / temperature)
 }

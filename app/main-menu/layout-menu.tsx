@@ -153,6 +153,12 @@ const LayoutMenu = () => {
             method : "POST",
           };
 
+        case AlgorithmEnum.Annealing:
+            return {
+                url: apiPath + "simulated_annealing",
+                method: "POST",
+            };
+
         default:
           return null;
       }

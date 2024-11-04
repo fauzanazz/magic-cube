@@ -35,7 +35,7 @@ func main() {
 
 	// Path
 	router.HandleFunc("/api/steepest_ascent", SteepestAscentHandler).Methods("POST")
-	router.HandleFunc("/api/simulated_anneling", SimulatedAnneling).Methods("GET")
+	router.HandleFunc("/api/simulated_annealing", SimulatedAnneling).Methods("POST")
 	router.HandleFunc("/api/genetic_algorithm", GeneticAlgorithm).Methods("POST")
 	router.HandleFunc("/api/stochastic_hill_climbing", StochasticHillClimbing).Methods("POST")
 	router.HandleFunc("/api/test_obj_func", TestObjFunc).Methods("GET")
@@ -45,7 +45,12 @@ func main() {
 }
 
 func SimulatedAnneling(w http.ResponseWriter, r *http.Request) {
-	//Algorithm.SimulatedAnneling()
+	resp := Algorithm.SimulatedAnneling()
+	if resp {
+		json.NewEncoder(w).Encode("OK")
+	} else {
+		json.NewEncoder(w).Encode("Error")
+	}
 }
 
 func StochasticHillClimbing(w http.ResponseWriter, r *http.Request) {
