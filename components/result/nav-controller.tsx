@@ -1,9 +1,10 @@
+"use client"
 import Image from "next/image";
 
 import { Button } from "../ui/button";
 import Link from "next/link";
 import NavCapsule from "./nav-link-capsule";
-import { usePathname, useRouter }from "next/navigation";
+import { usePathname }from "next/navigation";
 
 const NavController = () => {
   const pathname = usePathname();

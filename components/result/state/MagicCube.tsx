@@ -1,10 +1,11 @@
-// CubeGrid.tsx
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
-import Cube from "./Cube"; // Adjust the path as necessary
-import { State } from "@/context/DataProvider";
+import Cube from "./Cube";
+import { State } from "@/types/state";
 
 export interface CubeGridProps {
   initialCubes: State;
@@ -72,11 +73,8 @@ const MagicCube: React.FC<CubeGridProps> = ({ initialCubes }) => {
           z - (gridDimension - 1) / 2
         );
 
-        let selectedColor = GeneratedColor[(x + y + z) % GeneratedColor.length];
-
-        let cubeSize = [1, 0.7, 1];
-
-        // Dummy Test
+        const selectedColor = GeneratedColor[(x + y + z) % GeneratedColor.length];
+        const cubeSize = [1, 0.7, 1];
 
         cubes.push(
           <Cube

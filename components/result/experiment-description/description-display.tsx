@@ -1,5 +1,7 @@
+"use client"
 
 import DescriptionField, { DescFieldProps } from "./description-field";
+import React from "react";
 
 export interface DescriptionDescProps {
   algorithm: string;
